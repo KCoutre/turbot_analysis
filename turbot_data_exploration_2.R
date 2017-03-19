@@ -219,6 +219,12 @@ save(df15, file="df_final.Rda")
 
 monthly_act<-ddply(df15, .(TAG_NUM, month), summarize, 
                monthly_max=max(act, na.rm=TRUE),
-               monthly_min=min(act, na.rm=TRUE))
+               monthly_min=min(act, na.rm=TRUE), 
+               monthly_median=mean(act, na.rm=TRUE))
+ggplot()+geom_line(data=monthly_act, aes(month , -monthly_max)) +
+  geom_line(data=monthly_act, aes(month,-monthly_min))+
+  bw + facet_wrap(~TAG_NUM, nrow=2) + 
+  geom_hline(yintercept=0, color="red") + 
+  geom_line(data=monthly_act,aes(month, -monthly_median))
 
-
+length(which(df15$act==0))/nrow(df15)
